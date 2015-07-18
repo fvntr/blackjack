@@ -15,4 +15,3 @@ class window.Card extends Backbone.Model
     @set 'revealed', !@get 'revealed'
     @
 
-# console.log flip

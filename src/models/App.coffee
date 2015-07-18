@@ -5,39 +5,25 @@ class window.App extends Backbone.Model
     @set 'deck', deck = new Deck()
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
-    #@attributes.playerHand
-    console.log @get('dealerHand')
-    # @get('dealerHand').on('hit', @bustCheck, @)
-    #console.log @get('dealerHand').models[0].flip()
-    # console.log @get('dealerHand').scores(), @get('playerHand').scores()
+    @get('playerHand').on 'all', @playerEvents, @
+    @get('dealerHand').on 'all', @dealerEvents, @  
 
-#end game
+  playerEvents: (event, hand) ->
+    switch event
+      when 'bust' then @trigger 'winDealer' #"the dealer wins and the game ends"
+      when 'stand' then @get('dealerHand').playToWin()
   
-  bustCheck: ->
-    playerScore = @get('playerHand').scores()
-    dealerScore = @get('dealerHand').scores()  
-    if Math.min.apply(null,playerScore) > 21
-      alert "game over brah"
-    if Math.min.apply(null,dealerScore) > 21
-      alert "you win brah" 
+  dealerEvents: (event, hand) ->
+    switch event
+      when "bust" then @trigger "winPlayer"
+      when "stand" then @scoreChecker()
 
-#score checker
   scoreChecker: -> 
-    @get('dealerHand').models[0].flip()
-    playerScore = @get('playerHand').scores()
-    dealerScore = @get('dealerHand').scores() 
-    @bustCheck()
-
-  # either hit 21 flip
-  # if player hits stand, flip 
-
-
-    # if (playerScore > )
-
-    # 
-
-
-    # @get('dealerHand').models[0].flip()
-    #@get('dealerHand').models[0].flip()
-  @get('dealerHand').on('hit', -> 
-    console.log "hit" , @)
+    playerScore = @get('playerHand').maxScore()
+    dealerScore = @get('dealerHand').maxScore()
+    if playerScore > dealerScore 
+      @trigger 'winPlayer'
+    if dealerScore > playerScore
+      @trigger 'winDealer'
+    else 
+      @trigger 'draw'
