@@ -5,4 +5,8 @@ class window.App extends Backbone.Model
     @set 'deck', deck = new Deck()
     @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
+    console.log @get('dealerHand').scores(), @get('playerHand').scores()
 
+#end game
+#score checker
+  # scoreChecher: 
