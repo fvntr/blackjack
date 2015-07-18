@@ -6,7 +6,7 @@ class window.Hand extends Backbone.Collection
   hit: ->
     if @length  < 5 
         @add(@deck.pop()).last();
-      #  console.log @scores()
+    @trigger('scoreChecker', @)
 
   hasAce: -> @reduce (memo, card) ->
     memo or card.get('value') is 1
@@ -25,7 +25,9 @@ class window.Hand extends Backbone.Collection
 
   stand: ->
     @add(@deck.pop()).last();
-    # console.log "dealer",@scores()
+
+
+    # ,m nju87console.log "dealer",@scores()
     # dealer decided whether it hits or not
     # access the dealer's hand
     # hit him if 
